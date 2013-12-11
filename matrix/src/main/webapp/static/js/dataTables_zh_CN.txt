@@ -1,0 +1,16 @@
+{
+	"sProcessing": "正在加载数据...",
+	"sZeroRecords": "没有数据显示！",
+	"sEmptyTable": "没有数据显示！",
+	"sLoadingRecords": "请稍候 ,数据正在加载...",
+	"sSearch": "搜索:",
+	"sLengthMenu": "显示_MENU_ 条记录",
+	"sInfo":"显示  _START_ 到 _END_ 共 _TOTAL_ 条记录",
+	"sInfoEmpty": "显示  0 到 0 共 0 条记录",
+	"oPaginate": {
+		"sFirst": "第一页",
+		"sLast": "最后一页",
+		"sNext": "下一页",
+		"sPrevious": "上一页"
+	}
+}

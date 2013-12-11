@@ -1,0 +1,39 @@
+package com.matrix.core.util;
+
+import java.util.List;
+
+import com.matrix.core.model.TreeVO;
+
+public class TreeUtils {
+
+	public static <T extends TreeVO> String treeToJson(List<T> tree) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		if (null != tree || tree.size() > 0) {
+			for (TreeVO node : tree) {
+				sb.append("{\"id\":\"").append(node.getId()).append("\"");
+
+				if (null == node.getParent()) {
+					sb.append(",\"pId\":null");
+				} else {
+					sb.append(",\"pId\":\"").append(node.getParent().getId()).append("\"");
+				}
+
+				sb.append(",\"name\":\"").append(node.getName()).append("\"");
+
+				sb.append(",\"isParent\":");
+				if (node.getLeaf()) {
+					sb.append("false");
+				} else {
+					sb.append("true");
+				}
+
+				sb.append("},");
+			}
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		sb.append("]");
+		
+		return sb.toString();
+	}
+}
