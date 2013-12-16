@@ -2,31 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<style>
-.btn-toolbar>.btn-group>.btn {
-	margin-top: 3px;
-	margin-bottom: 3px;
-}
-</style>
-
-<!-- 新增组织 -->
-<div class="modal fade" id="org_add_dialog" tabindex="-1" role="dialog" aria-labelledby="org_add_dialog_title" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="org_add_dialog_title">新增-组织</h4>
-      </div>
-      <div id="org_add_dialog_content" class="modal-body">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button id="org_add_dialog_save" type="button" class="btn btn-primary">保存</button>
-      </div>
-    </div>
-  </div>
-</div>
-      
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
@@ -146,8 +121,14 @@
 				}
 				//navButtons
 				$(grid_selector).jqGrid('navGrid',pager_selector,{ //navbar options
+							alertcap : "信息",
+							alerttext : "请您先选择要操作的记录！",
 							edit : true,
 							editicon : 'icon-pencil blue',
+							editfunc : function(id){
+								$("#org_edit_dialog_content").load('${ctx}/sys/org/edit?id='+id);
+								$("#org_edit_dialog").modal("show");
+							},
 							add : true,
 							addicon : 'icon-plus-sign purple',
 							addfunc	: function () {
@@ -298,6 +279,21 @@
 					      });
 				});
 				
+				$("#org_edit_dialog_save").on('click',function() {
+					$("#org_edit_form").ajaxSubmit({
+				        dataType:'json',
+				        success:function (data){
+				        	console.info(data);
+				            if("success" == data.status){
+				                $('#org_edit_dialog').modal("hide");
+				                $("#orgTable").jqGrid().trigger("reloadGrid");
+				        	}else{
+				        		bootbox.alert(data.msg);
+				        	}
+				        }
+				      });
+			});
+				
 			})
 		</script>
 		<!-- PAGE CONTENT ENDS -->
@@ -305,6 +301,41 @@
 	<!-- /.col -->
 </div>
 <!-- /.row -->
+<!-- 新增组织 -->
+<div class="modal fade" id="org_add_dialog" tabindex="-1" role="dialog" aria-labelledby="org_add_dialog_title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="org_add_dialog_title">新增-组织</h4>
+      </div>
+      <div id="org_add_dialog_content" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="org_add_dialog_save" type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 修改组织 -->
+<div class="modal fade" id="org_edit_dialog" tabindex="-1" role="dialog" aria-labelledby="org_edit_dialog_title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="org_edit_dialog_title">修改-组织</h4>
+      </div>
+      <div id="org_edit_dialog_content" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="org_edit_dialog_save" type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

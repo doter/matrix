@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.matrix.core.util.Page;
@@ -43,18 +44,30 @@ public class OrganizationController extends BaseController{
 	@RequestMapping(value="/addNew", method = RequestMethod.GET)
 	public @ModelAttribute("org") Organization addNew(String parentId) {
 		Organization org = new Organization();
-		//Organization parent = new Organization();
 		if(StringUtils.isNotEmpty(parentId)){
 			Organization parent = this.service.get(parentId);
 			org.setParent(parent);
 		}
-		//org.setParent(parent);
+		return org;
+	}
+	
+	@RequestMapping(value="/edit", method = RequestMethod.GET)
+	public String edit(String id) {
+		return "sys/org/edit";
+	}
+	
+	@ModelAttribute("org")
+	public Organization getValue(String id){
+		Organization org = null;
+		if(StringUtils.isNotEmpty(id)){
+			org = service.get(id);
+		}
 		return org;
 	}
 	
 	@RequestMapping(value="/save", method = RequestMethod.POST)
 	@ResponseBody
-	public AjaxResult  save(Organization org) {
+	public AjaxResult save(@ModelAttribute("org")Organization org) {
 		service.save(org);
 		AjaxResult rs = new AjaxResult(AjaxResult.STATUS_SUCCESS);
 		return rs;
@@ -68,48 +81,10 @@ public class OrganizationController extends BaseController{
 	@RequestMapping(value="/getOrgTree", method = RequestMethod.POST)
 	@ResponseBody
 	public String  getOrgTree(String id) {
-		//return service.getChildren(orgId);
 		return TreeUtils.treeToJson(service.getChildren(id));
 	}
 	
-	/**
-	 * 生成组织机构json
-	 */
-	private String orgTreeJson(List<Organization> list) {
-		StringBuffer sb = new StringBuffer();
-		try {
-			sb.append("[");
-			for (int i = 0; i < list.size(); i++) {
-				Organization org = list.get(i);
-				sb.append("{\"id\":\"").append(org.getId()).append("\"");
-				
-				
-				if(null == org.getParent()){
-					sb.append(",\"pId\":null");
-				}else{
-					sb.append(",\"pId\":\"").append(org.getParent().getId()).append("\"");
-				}
-				
-				sb.append(",\"name\":\"").append(org.getName()).append("\"");
-				sb.append(",\"isParent\":").append("true").append("");
-				//if (org.getLeaf()) {
-				//	sb.append("false");
-				//} else {
-				//	sb.append("true");
-				//}
-				sb.append("");
-				if (i == list.size() - 1) {
-					sb.append("}");
-				} else {
-					sb.append("},");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		sb.append("]");
-		return sb.toString();
-	}
+	
 }
 
 

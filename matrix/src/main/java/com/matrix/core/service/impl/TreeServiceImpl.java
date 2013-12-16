@@ -4,35 +4,18 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-
 import com.googlecode.genericdao.search.Search;
 import com.matrix.core.model.TreeVO;
 import com.matrix.core.service.TreeService;
-import com.matrix.sys.model.Organization;
 
 public abstract class TreeServiceImpl <T extends TreeVO,ID extends Serializable> extends  BasicDataServiceImpl<T, ID> implements TreeService<T,ID>{
 	public static final String LEVEL_CODE_DELIMITER = "-";
 	@Override
 	protected void setAddNew(T entity) {
-		super.setAddNew(entity);
 		//树节点相关属性的设置
-		if (null != entity.getParent() 
-				&& null != entity.getParent().getId()
-				&& StringUtils.isNotEmpty(entity.getParent().getId().toString())){
-			TreeVO parent = (TreeVO)getDao().find(entity.getParent().getId());
-			int count = getChildrenSize(parent.getId()) + 1;
-			String levelCode = parent.getLevelCode()+LEVEL_CODE_DELIMITER + StringUtils.leftPad(""+count, getlevelCodeLength(),"0");
-			entity.setLevelCode(levelCode);
-			entity.setDegree(parent.getDegree()+ 1);
-			entity.setLeaf(true);
-			
-			if(parent.getLeaf()){
-				updateLeaf(entity.getParent().getId(),false);
-			}
-		}else{
+		if (isRootNode(entity)){
 			//根节点
 			try {
 				BeanUtils.setProperty(entity, "parent", null);
@@ -43,11 +26,44 @@ public abstract class TreeServiceImpl <T extends TreeVO,ID extends Serializable>
 			entity.setLevelCode(StringUtils.leftPad(""+count, getlevelCodeLength(),"0"));
 			entity.setDegree(0);//根结点设置为0
 			entity.setLeaf(true);
+		}else{
+			TreeVO parent = (TreeVO)getDao().find(entity.getParent().getId());
+			int count = getChildrenSize(parent.getId()) + 1;
+			String levelCode = parent.getLevelCode()+LEVEL_CODE_DELIMITER + StringUtils.leftPad(""+count, getlevelCodeLength(),"0");
+			entity.setLevelCode(levelCode);
+			entity.setDegree(parent.getDegree()+ 1);
+			entity.setLeaf(true);
+			
+			if(parent.getLeaf()){
+				updateLeaf(entity.getParent().getId(),false);
+			}
 		}
-		
+		super.setAddNew(entity);
 	}
-	
-	
+	/**
+	 * 是否要结点
+	 * @param entity
+	 * @return
+	 */
+	private boolean isRootNode(T entity){
+		boolean isRoot = true;
+		if (null != entity.getParent() 
+				&& null != entity.getParent().getId()
+				&& StringUtils.isNotEmpty(entity.getParent().getId().toString())){
+			isRoot = false;
+		}
+		return isRoot;
+	}
+	protected void setUpdate(T entity) {
+		if (isRootNode(entity)){
+			try {
+				BeanUtils.setProperty(entity, "parent", null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		super.setUpdate(entity);
+	}
 	
 	@Override
 	protected void afterRemove(T entity) {
