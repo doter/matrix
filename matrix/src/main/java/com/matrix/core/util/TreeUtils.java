@@ -18,9 +18,8 @@ public class TreeUtils {
 				} else {
 					sb.append(",\"pId\":\"").append(node.getParent().getId()).append("\"");
 				}
-
 				sb.append(",\"name\":\"").append(node.getName()).append("\"");
-
+				sb.append(",\"fullName\":\"").append(node.getFullName()).append("\"");
 				sb.append(",\"isParent\":");
 				if (node.getLeaf()) {
 					sb.append("false");

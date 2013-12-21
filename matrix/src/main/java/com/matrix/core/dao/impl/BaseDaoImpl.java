@@ -46,7 +46,6 @@ public class BaseDaoImpl<T, ID extends Serializable>  extends GenericDAOImpl<T, 
 		
 		search.setMaxResults(page.getPageSize());
 		search.setFirstResult(page.getStartIndex());
-		
 		SearchResult<T>  sr = searchAndCount(search);
 		
 		page.setTotalCount(sr.getTotalCount());

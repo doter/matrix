@@ -39,6 +39,7 @@ public abstract class VOServiceImpl <T extends VO, ID extends Serializable> exte
 	protected void setUpdate(T entity) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		entity.setUpdateTime(now);
+		entity.setUpdateUser(getCurrentUser().getName());
 	}
 	
 	public void updateStatus(ID id, Status status){

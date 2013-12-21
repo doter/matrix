@@ -3,6 +3,7 @@ package com.matrix.core.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.genericdao.search.Sort;
 
 public class Page<T> {
@@ -32,6 +33,7 @@ public class Page<T> {
 	private List<T> result;
 
 	/** 排序对象 **/
+	@JsonIgnore
 	private List<Sort> sorts = new ArrayList<Sort>();
 
 	public Page() {

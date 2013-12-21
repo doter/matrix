@@ -33,9 +33,7 @@ public class Organization extends TreeVO<String> implements Serializable {
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Organization parent;
 	
-	/** 组织全称 */
-	@Column(name="full_name",length = 254)
-	private String fullName;
+	
 
 	public Organization() {
 		super();
@@ -60,13 +58,5 @@ public class Organization extends TreeVO<String> implements Serializable {
 
 	public void setParent(Organization parent) {
 		this.parent = parent;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
 	}
 }

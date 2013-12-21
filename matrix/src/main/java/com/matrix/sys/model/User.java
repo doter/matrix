@@ -15,30 +15,29 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
-import com.matrix.core.model.VO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.matrix.core.model.BasicDataVO;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "t_sys_user")
-public class User extends VO<String> implements Serializable {
+public class User extends BasicDataVO<String> implements Serializable {
 	@Id
 	@GenericGenerator(name="idGenerator",strategy="uuid")
 	@GeneratedValue(generator="idGenerator")
 	private String id;
 	
-	/** 用户名，登录系统的账号 */
+	/** 登录系统的账号 */
 	@Column(length = 32,nullable=false)
-	private String name;
-
-	/** 显示名称 */
-	@Column(name = "display_name", length = 32, nullable=false)
-	private String displayName;
+	private String account;
 
 	/** 密码 */
 	@Column(length = 254 , nullable=false)
+	@JsonIgnore
 	private String password;
 	
 	@Column(length = 64)
+	@JsonIgnore
 	private String salt;
 
 	/** 是否启用 */
@@ -50,14 +49,19 @@ public class User extends VO<String> implements Serializable {
 	@JoinColumn(name = "org_id")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Organization org;
+	
+	/** 手机号 */
+	@Column(length=24)
+	private String mobile;
+	
+	/** 联系电话 */
+	@Column(length = 24)
+	private String phone;
 
-	/** 排序号 */
-	@Column(name = "sort_no")
-	private Integer sortNo;
+	/** 邮箱 */
+	@Column(length = 64)
+	private String email;
 
-	/** 描述 */
-	@Column(length = 254)
-	private String description;
 
 	public User() {
 		super();
@@ -67,25 +71,16 @@ public class User extends VO<String> implements Serializable {
 		return id;
 	}
 	
-	
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getAccount() {
+		return account;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setAccount(String account) {
+		this.account = account;
 	}
 
 	public String getPassword() {
@@ -121,20 +116,27 @@ public class User extends VO<String> implements Serializable {
 		this.org = org;
 	}
 
-	public Integer getSortNo() {
-		return sortNo;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setSortNo(Integer sortNo) {
-		this.sortNo = sortNo;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 }

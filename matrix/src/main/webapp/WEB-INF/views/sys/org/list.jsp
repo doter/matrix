@@ -106,7 +106,7 @@
 				});
 				//navButtons
 				$(grid_selector).jqGrid('navGrid',pager_selector,{ //navbar options
-							alertcap : "信息",
+							alertcap : "消息",
 							alerttext : "请您先选择要操作的记录！",
 							edit : true,
 							edittext : "修改",
@@ -127,7 +127,7 @@
 							deltext : "删除",
 							delicon : 'icon-trash red',
 							delfunc : function(id){
-								bootbox.confirm("您确认要删除该组组织吗?", function(result) {
+								bootbox.confirm("您确认要删除该组织吗?", function(result) {
 									if(result) {
 										$.get("${ctx}/sys/org/remove/"+id,function(data){
 							            	if("success" == data.status){

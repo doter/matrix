@@ -38,6 +38,10 @@ public abstract class VO<ID extends Serializable> extends Entity<ID> {
 	@JsonFormat(pattern="yyyy-MM-dd")
 	@Column(name = "update_time")
 	private Timestamp updateTime;
+	
+	/** 更新人员,登录的用户账号 */
+	@Column(name="update_user",length = 36,updatable=false)
+	private String updateUser;
 
 	/** 创建者的用户,登录的用户账号 */
 	@Column(length = 36,updatable=false)
@@ -76,6 +80,15 @@ public abstract class VO<ID extends Serializable> extends Entity<ID> {
 
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
 	}
 
 	public String getCreator() {
