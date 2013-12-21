@@ -15,7 +15,7 @@
 						<div class="widget-main no-padding">
 							<div class="table-responsive">
 								<div class="zTreeDemoBackground left">
-									<ul id="orgTree" class="ztree"></ul>
+									<ul id="orgTree" class="ztree" style="height:650px; overflow:auto;"></ul>
 								</div>
 							</div>
 						</div>
@@ -62,40 +62,38 @@
 				var pager_selector = "#orgTablepager";
 
 				$(grid_selector).jqGrid({
+					caption : "组织列表",
+					height : 554,
+					rowNum : 15,
+					rowList : [ 15,25,50,100 ],
 					url:"${ctx}/sys/org/listData",
-					postData : {"parentId" : function(){return selectedOrgNode == null ? "" : selectedOrgNode.id}},
 					datatype : "json",
-					height : 250,
 					colNames : [ 'ID', '组织编码', '组织全称', '创建时间','创建人', '状态', '最后更新时间', '描述' ],
 					colModel : [
-					            {name : 'id',index : 'id',width : 60},
-					            {name : 'code',index : 'code',width : 60, editable: true,editoptions:{size:"36",maxlength:"32"}},
-					            {name : 'fullName',index : 'fullName',width : 60, editable: true,editoptions:{size:"36",maxlength:"254"}},
-					            {name : 'createTime',index : 'createTime',width : 60,editable:true, sorttype:"date", unformat: pickDate},
+					            {name : 'id',index : 'id',hidden:true},
+					            {name : 'code',index : 'code',width : 120},
+					            {name : 'fullName',index : 'fullName',width : 200},
+					            {name : 'createTime',index : 'createTime',width : 120},
 					            {name : 'creator',index : 'creator',width : 60},
 					            {name : 'status',index : 'status',width : 60},
-					            {name : 'updateTime',index : 'updateTime',width : 60},
-					            {name : 'description',index : 'description',width : 60}
+					            {name : 'updateTime',index : 'updateTime',width : 120},
+					            {name : 'description',index : 'description',width : 180}
 							   ],
-
 					viewrecords : true,
-					rowNum : 10,
-					rowList : [ 15,25,50,100 ],
+					postData : {"parentId" : function(){return selectedOrgNode == null ? "" : selectedOrgNode.id}},
 					pager : pager_selector,
 					altRows : true,
-					//toppager: true,
-
+					sortname : "createTime",
+					autowidth : true,
 					multiselect : true,
 					//multikey: "ctrlKey",
 					multiboxonly : true,
-					
 					jsonReader : {
 					      root:"result",
 					      page: "currPage",
 					      total: "totalPage",
 					      records: "totalCount"
 					},
-
 					loadComplete : function() {
 						var table = this;
 						setTimeout(function() {
@@ -104,31 +102,21 @@
 							$.jqGridExt.updatePagerIcons(table);
 							$.jqGridExt.enableTooltips(table);
 						}, 0);
-					},
-
-					//editurl:
-					caption : "组织列表",
-					autowidth : true
+					}
 				});
-
-				//enable datepicker
-				function pickDate( cellvalue, options, cell ) {
-					setTimeout(function(){
-						$(cell) .find('input[type=text]')
-								.datepicker({format:'yyyy-mm-dd' , autoclose:true}); 
-					}, 0);
-				}
 				//navButtons
 				$(grid_selector).jqGrid('navGrid',pager_selector,{ //navbar options
 							alertcap : "信息",
 							alerttext : "请您先选择要操作的记录！",
 							edit : true,
+							edittext : "修改",
 							editicon : 'icon-pencil blue',
 							editfunc : function(id){
 								$("#org_edit_dialog_content").load('${ctx}/sys/org/edit?id='+id);
 								$("#org_edit_dialog").modal("show");
 							},
 							add : true,
+							addtext : "新建",
 							addicon : 'icon-plus-sign purple',
 							addfunc	: function () {
 								var selectedOrgId = selectedOrgNode == null ? "" : selectedOrgNode.id;
@@ -136,6 +124,7 @@
 								$("#org_add_dialog").modal("show");
 							},
 							del : true,
+							deltext : "删除",
 							delicon : 'icon-trash red',
 							delfunc : function(id){
 								bootbox.confirm("您确认要删除该组组织吗?", function(result) {
@@ -151,10 +140,13 @@
 								});
 							},
 							search : true,
+							searchtext : "查询",
 							searchicon : 'icon-search orange',
 							refresh : true,
+							refreshtext : "刷新",
 							refreshicon : 'icon-refresh green',
-							view : true,
+							view : false,
+							viewtext : "查看",
 							viewicon : 'icon-zoom-in grey',
 						},
 						{
@@ -174,16 +166,12 @@
 							afterRedraw : function() {
 								$.jqGridExt.setStyleSearchFilters($(this));
 							},
-							showQuery : true,
+							showQuery : false,
 							multipleSearch:true
 						}, 
 						{} /* view parameters*/
 					);
 				
-				
-
-				
-
 				//var selr = jQuery(grid_selector).jqGrid('getGridParam','selrow');
 				$("#org_add_dialog_save").on('click',function() {
 						$("#org_add_form").ajaxSubmit({
