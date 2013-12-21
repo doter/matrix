@@ -1,5 +1,6 @@
 package com.matrix.core.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.genericdao.search.Sort;
@@ -25,13 +26,13 @@ public class Page<T> {
 	private int startIndex = 0;
 	
 	/** 当前页数码  从1开始**/
-	private int currpage;
+	private int currPage;
 	
 	/** 数据结果 **/
 	private List<T> result;
 
 	/** 排序对象 **/
-	private List<Sort> sorts;
+	private List<Sort> sorts = new ArrayList<Sort>();
 
 	public Page() {
 
@@ -102,20 +103,24 @@ public class Page<T> {
 		this.totalPage = totalPage;
 	}
 
-	public int getCurrpage() {
+	public int getCurrPage() {
+		if(0 != currPage){
+			return currPage;
+		}
 		int mod = (startIndex+1) % pageSize;
 		if(0 == mod){
-			currpage = (int)((startIndex+1) / pageSize);
+			currPage = (int)((startIndex+1) / pageSize);
 		}else{
-			currpage = (int)((startIndex + 1 - mod) / pageSize) + 1;
+			currPage = (int)((startIndex + 1 - mod) / pageSize) + 1;
 		}
 		
 		
 		
-		return currpage;
+		return currPage;
 	}
 
-	public void setCurrpage(int currpage) {
-		this.currpage = currpage;
+	public void setCurrPage(int currpage) {
+		this.currPage = currpage;
+		startIndex = (currpage-1) * pageSize;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import com.googlecode.genericdao.search.Search;
+import com.matrix.core.exception.BizException;
 import com.matrix.core.model.TreeVO;
 import com.matrix.core.service.TreeService;
 
@@ -111,6 +112,13 @@ public abstract class TreeServiceImpl <T extends TreeVO,ID extends Serializable>
 		getDao().updateById(getDao().getEntityClass(), id, propertys);
 	}
 	
+	protected void beforeRemove(T entity) {
+		int count = getChildrenSize(entity.getId());
+		if(count > 0){
+			throw new BizException("该记录还有下级数据，不能删除！");
+		}
+		super.beforeRemove(entity);
+	}
 	//获取层次码的长度
 	protected int getlevelCodeLength() {
 		return 4;

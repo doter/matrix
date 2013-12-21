@@ -13,7 +13,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import com.googlecode.genericdao.search.IMutableSearch;
 import com.googlecode.genericdao.search.Search;
 import com.matrix.core.dao.impl.BaseDaoImpl;
 import com.matrix.core.util.SQLUtil;
@@ -34,9 +33,8 @@ import com.matrix.sys.model.Organization;
 public class OrganizationDaoImpl extends BaseDaoImpl<Organization, String> implements OrganizationDao {
 
 	@Override
-	public IMutableSearch getFindPageSearch(Map params) {
-		Search search = new Search(Organization.class);
-		
+	public Search getFindPageSearch(Map params) {
+		Search search = super.getFindPageSearch(params);
 		StringBuffer filter  = new StringBuffer(" 1=1 ");
 		if (StringUtils.isNotEmpty((String)params.get("orgId"))){
 			filter.append(" and {org.id} = '").append((String)params.get("orgId")).append("'");

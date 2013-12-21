@@ -820,6 +820,7 @@
 		<!-- page specific plugin scripts -->
 		<script src="${ctx}/static/js/jquery.loadmask.js"></script>
 		<script src="${ctx}/static/js/jquery.form.js"></script>
+		<script src="${ctx}/static/js/jqGridExt.js"></script>
 		<script src="${ctx}/static/zTree/js/jquery.ztree.all-3.5.min.js"></script>
 		<script src="${ctx}/static/assets/js/jquery.dataTables.min.js"></script>
 		<script src="${ctx}/static/assets/js/jquery.dataTables.bootstrap.js"></script>

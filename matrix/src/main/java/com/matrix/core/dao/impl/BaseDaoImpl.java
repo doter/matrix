@@ -1,6 +1,7 @@
 package com.matrix.core.dao.impl;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,11 +17,12 @@ import com.googlecode.genericdao.search.Search;
 import com.googlecode.genericdao.search.SearchResult;
 import com.matrix.core.dao.BaseDao;
 import com.matrix.core.exception.BizException;
+import com.matrix.core.util.FilterParser;
 import com.matrix.core.util.Page;
 
 
 public class BaseDaoImpl<T, ID extends Serializable>  extends GenericDAOImpl<T, ID> implements BaseDao<T, ID> {
-	private Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
 
 	@Autowired
 	@Override
@@ -36,7 +38,7 @@ public class BaseDaoImpl<T, ID extends Serializable>  extends GenericDAOImpl<T, 
 	public Page<T> findPage(Page<T> page, Map queryParams) {
 		IMutableSearch search = getFindPageSearch(queryParams);
 		//增加排序
-		if(null != page.getSorts()){
+		if(null != page.getSorts() && page.getSorts().size() > 0){
 			search.getSorts().clear();
 			
 			search.setSorts(page.getSorts());
@@ -133,8 +135,13 @@ public class BaseDaoImpl<T, ID extends Serializable>  extends GenericDAOImpl<T, 
 	}
 
 	@Override
-	public IMutableSearch getFindPageSearch(Map queryParams) {
+	public Search getFindPageSearch(Map queryParams) {
 		Search search = new Search(persistentClass);
+		if(queryParams.containsKey("filters")){
+			String filters  = (String)queryParams.get("filters");
+			Object[] a = FilterParser.parser(filters);
+			search.addFilterCustom((String)a[0], (List)a[1]);
+		}
 		return search;
 	}
 	

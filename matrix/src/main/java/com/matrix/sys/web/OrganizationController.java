@@ -1,18 +1,19 @@
 package com.matrix.sys.web;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.googlecode.genericdao.search.Sort;
 import com.matrix.core.util.Page;
 import com.matrix.core.util.TreeUtils;
 import com.matrix.core.web.BaseController;
@@ -33,10 +34,26 @@ public class OrganizationController extends BaseController{
 
 	@RequestMapping(value="/listData", method = RequestMethod.GET)
 	@ResponseBody
-	public Object listData(String parentId) {
+	public Object listData(@RequestParam String parentId, 
+			@RequestParam(value = "page", defaultValue = "1") Integer currPage,
+			@RequestParam(value = "rows", defaultValue = "20") Integer pageSize,
+			@RequestParam(value = "sidx") String sortField,
+			@RequestParam(value = "sord") String sortType,
+			String filters) {
+		
 		Page<Organization> page = new Page<Organization>();
+		page.setPageSize(pageSize);
+		page.setCurrPage(currPage);
+		if(StringUtils.isNotEmpty(sortField)){
+			page.getSorts().add(new Sort(sortField, "desc".equalsIgnoreCase(sortType) ? true : false));
+		}
+		
 		Map queryParams = new HashMap();
 		queryParams.put("parentId", parentId);
+		if(StringUtils.isNotEmpty(filters)){
+			queryParams.put("filters", filters);
+		}
+		
 		page = service.findPage(page, queryParams);
 		return page;
 	}
@@ -72,6 +89,29 @@ public class OrganizationController extends BaseController{
 		AjaxResult rs = new AjaxResult(AjaxResult.STATUS_SUCCESS);
 		return rs;
 	}
+	
+	@RequestMapping(value="/remove/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public AjaxResult remove(@PathVariable String id) {
+		AjaxResult rs = new AjaxResult();
+		if(StringUtils.isEmpty(id)){
+			rs.setStatus(AjaxResult.STATUS_ERROR);
+			rs.setMsg("删除时参数id不能为空！");
+			return rs;
+		}
+		try{
+			service.removeById(id);
+			rs.setStatus(AjaxResult.STATUS_SUCCESS);
+			rs.setMsg("删除成功！");
+		}catch(Exception e){
+			rs.setStatus(AjaxResult.STATUS_ERROR);
+			rs.setMsg("删除失败！<br/>" + e.getMessage());
+		}
+		
+		return rs;
+	}
+	
+	
 	
 	/**
 	 * 
