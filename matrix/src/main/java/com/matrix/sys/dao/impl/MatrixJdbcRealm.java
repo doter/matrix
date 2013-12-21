@@ -79,13 +79,12 @@ public class MatrixJdbcRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-		
-		String userName = token.getUsername();
-		if (StringUtils.isEmpty(userName)) {
+		String account = token.getUsername();
+		if (StringUtils.isEmpty(account)) {
 			throw new AccountException("用户名不能为空！");
 		}
 		
-		User user = userDao.findUserByName(userName);
+		User user = userDao.findUserByAccount(account);
 		if(null == user){
 			throw new UnknownAccountException("用户名或密码不正确！");
 		}
@@ -99,14 +98,14 @@ public class MatrixJdbcRealm extends AuthorizingRealm {
 			
 
 			//在线用户
-			OnlineUser onlineUser = new OnlineUser(user.getId(),user.getName(),user.getDisplayName());
+			OnlineUser onlineUser = new OnlineUser(user.getId(),user.getAccount(),user.getName());
 			
 			info = new SimpleAuthenticationInfo(onlineUser, user.getPassword().toCharArray(), getName());
 			
 			info.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
 			
 		} catch (Exception e) {
-			final String message = "There was a exception error while authenticating user [" + userName + "]";
+			final String message = "There was a exception error while authenticating user [" + account + "]";
 			logger.error(message, e);
 			throw new AuthenticationException(message, e);
 		} finally {

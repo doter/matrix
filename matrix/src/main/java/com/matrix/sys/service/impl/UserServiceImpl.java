@@ -2,13 +2,13 @@ package com.matrix.sys.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.matrix.core.service.impl.BaseServiceImpl;
+import com.matrix.core.service.impl.BasicDataServiceImpl;
 import com.matrix.sys.dao.UserDao;
 import com.matrix.sys.model.User;
 import com.matrix.sys.service.UserService;
 
 @Service
-public class UserServiceImpl extends BaseServiceImpl<User,String> implements UserService{
+public class UserServiceImpl extends BasicDataServiceImpl<User,String> implements UserService{
 	@Autowired
 	private UserDao dao;
 	
@@ -19,8 +19,8 @@ public class UserServiceImpl extends BaseServiceImpl<User,String> implements Use
 	
 
 	@Override
-	public User findUserByName(String name) {
-		return dao.findUserByName(name);
+	public User findUserByAccount(String account){
+		return dao.findUserByAccount(account);
 	}
 
 }

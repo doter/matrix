@@ -12,11 +12,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 
 import com.matrix.core.model.Entity;
 import com.matrix.core.service.BaseService;
 import com.matrix.core.util.Page;
+import com.matrix.sys.model.OnlineUser;
 
 /**
  * <b>类名称：</b>BaseServiceImpl<br/>
@@ -34,6 +35,7 @@ public abstract class BaseServiceImpl<T extends Entity, ID extends Serializable>
 		beforeSave(entity);
 		check(entity);
 		boolean rs = getDao().save(entity);
+		getDao().flush();
 		afterSave(entity);
 		return rs;
 	}
@@ -73,6 +75,7 @@ public abstract class BaseServiceImpl<T extends Entity, ID extends Serializable>
 	public void remove(T entity) {
 		beforeRemove(entity);
 		getDao().remove(entity);
+		getDao().flush();
 		afterRemove(entity);
 	}
 
@@ -100,6 +103,10 @@ public abstract class BaseServiceImpl<T extends Entity, ID extends Serializable>
 		for (T a : rs) {
 			remove(a);
 		}
+	}
+	
+	protected OnlineUser getCurrentUser() {
+		return (OnlineUser)SecurityUtils.getSubject().getPrincipal();
 	}
 	
 	public boolean exists(T entity){

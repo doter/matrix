@@ -398,7 +398,7 @@
 								</li>
 
 								<li>
-									<a href="#" target="center">
+									<a href="${ctx}/sys/user/list" target="center">
 										<i class="icon-double-angle-right"></i>
 										用户管理
 									</a>
@@ -828,8 +828,10 @@
 		<script src="${ctx}/static/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
 		<script src="${ctx}/static/assets/js/jqGrid/i18n/grid.locale-cn.js"></script>
 		<script src="${ctx}/static/assets/js/jquery.validate.min.js"></script>
+		<script src="${ctx}/static/jquery-validation/1.11.1/messages_bs_zh.js"></script>
+		
 		<script src="${ctx}/static/assets/js/additional-methods.min.js"></script>
-
+		<script src="${ctx}/static/js/dropDownTree.js"></script>
 		<!--[if lte IE 8]>
 		  <script src="${ctx}/static/assets/js/excanvas.min.js"></script>
 		<![endif]-->
