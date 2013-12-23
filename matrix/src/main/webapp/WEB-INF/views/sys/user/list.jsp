@@ -10,10 +10,28 @@
 			<div class="widget-body">
 				<div class="widget-main">
 					<form class="form-search">
-						<input type="text" class="search-query" placeholder="用户名" />
+					<fieldset>
+						<label>用户账号：</label>
+						<input type="text" name="account"/>&nbsp;&nbsp;
+						<label>用户编码：</label>
+						<input type="text" name="code"/>&nbsp;&nbsp;
+						<label>用户名称：</label>
+						<input type="text" name="name"/>&nbsp;&nbsp;
+						<label>所属组织：</label>
+						<input type="hidden" id ="queryOrgId" name="org.id"/>
+						<input type="text" id ="queryorgFullName" name="org.fullName"/>&nbsp;&nbsp;
+						<label>启用/禁用：</label>
+						<select name="isEnable">
+							<option value="">--全部--</option>
+							<option value="1">启用</option>
+							<option value="0">禁用</option>
+						</select>&nbsp;&nbsp;
+						
+						
 						<button type="button" class="btn btn-purple btn-sm">
 							查询 <i class="icon-search icon-on-right bigger-110"></i>
-						</button>
+						</button>							
+						</fieldset>
 					</form>
 				</div>
 			</div>

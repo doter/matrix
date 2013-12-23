@@ -10,6 +10,7 @@ $.fn.dropDownTree = function(options) {
     fieldId:"orgId",
     treeNodeClickCallback:"",
     selectEmptyText: ""	,
+    queryAddon : true,
     selectParent:false     
   	};     
   	var opts = $.extend(defaults, options); 
@@ -62,20 +63,20 @@ $.fn.dropDownTree = function(options) {
 	}
 	
 	function asyncSuccess(event, treeId, treeNode, msg) {
-//		var treeObj = $.fn.zTree.getZTreeObj(treeId);
-//    	var nodes=$("#"+tree).tree("getNodesByParamFuzzy", "name", "");
-//		var r=nodes[0];
-//		if(root==null && r){
-//			while(r.parentNode){r=r.parentNode};
-//			root = r;
-//			$("#"+tree).tree("expandNode", r, true, false);
-//			
-//			if(opts.selectEmptyText!=""){
-//				$("#"+tree).tree("addNodes", null, {"id":"","pId":null,"name":"("+opts.selectEmptyText+")"}, false);
-//				var emptyNode = $("#"+tree).tree("getNodeByParam", "id", "");
-//				$("#"+tree).tree("moveNode", root, emptyNode, "before");
-//			}
-//		}
+		var treeObj = $.fn.zTree.getZTreeObj(treeId);
+		var nodes = treeObj.getNodes();
+		var r=nodes[0];
+		if(root==null && r){
+			while(r.parentNode){r=r.parentNode};
+			root = r;
+			
+			treeObj.expandNode(r, true, true, false);
+			if(opts.selectEmptyText!=""){
+				treeObj.addNodes(null, {"id":"","pId":null,"name":"("+opts.selectEmptyText+")"}, false);
+				var emptyNode = treeObj.getNodeByParam("id", "");
+				treeObj.moveNode(root, emptyNode, "prev");
+			}
+		}
 	}
 	
 	
@@ -115,7 +116,10 @@ $.fn.dropDownTree = function(options) {
 	});
 	this.show = function show(){
 	    dropDownTree_currcontext = $this;
-	    var width = $this.width()+48;
+	    var width = $this.width()+10;
+	    if(opts.queryAddon){
+	    	width += 38;
+	    }
 		var offset = $this.offset();
   		var div_top = $this.offset().top +  $this.outerHeight();
 		var div_left = $this.offset().left;

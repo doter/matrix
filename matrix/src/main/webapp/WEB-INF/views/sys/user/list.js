@@ -10,7 +10,7 @@ $(function() {
 				rowList : [ 15, 25, 50, 100 ],
 				url : "${ctx}/sys/user/listData",
 				datatype : "json",
-				colNames : [ 'ID', '用户编码', '用户账号', '用户名称', '启用', '所属组织','创建时间', '创建人', '状态', '更新时间' ],
+				colNames : [ 'ID', '用户编码', '用户账号', '用户名称', '启用', '所属组织','创建时间', '创建人', '状态', '更新时间','操作'],
 				colModel : [ {name : 'id',index : 'id',hidden : true},
 				             {name : 'code',index : 'code',width : 120},
 				             {name : 'account',index : 'account',width : 80},
@@ -20,7 +20,11 @@ $(function() {
 				             {name : 'createTime',index : 'createTime',width : 120},
 				             {name : 'creator',index : 'creator',width : 60},
 				             {name : 'status',index : 'status',width : 60},
-				             {name : 'updateTime',index : 'updateTime',width : 120}
+				             {name : 'updateTime',index : 'updateTime',width : 120},
+				             {name : 'id', index: 'id', align:"center",formatter: function (cellvalue, options, rowObject) {
+				            	 var actions = "<a href='javascript:void(0)'  onclick=\"resetPw('" + cellvalue + "')\">密码重置</a>"
+				            	 return actions;
+				             }}
 				            ],
 				viewrecords : true,
 				pager : pager_render_id,
@@ -95,8 +99,19 @@ $(function() {
 				},
 				showQuery : false,
 				multipleSearch : true
-			}, {} /* view parameters*/
-	);
+			},
+			{}/* view parameters*/
+			
+	).jqGrid('navButtonAdd',pager_render_id,{
+		   caption:"提交", 
+		   title : "提交用户",
+		   buttonicon:"icon-ok blue", 
+		   onClickButton: function(){ 
+		     alert("submit...");
+		   }, 
+		   
+		   position:"before refresh_userTable"
+		});
 
 	//var selr = jQuery(grid_selector).jqGrid('getGridParam','selrow');
 	$("#add_dialog_save").on('click', function() {
@@ -158,4 +173,14 @@ $(function() {
 		});
 	}
 })
+
+function resetPw(id) {
+		alert(id);
+}
+
+
+var queryOrgTree = $("#queryorgFullName").dropDownTree({ssource:"${ctx}/sys/org/getOrgTree",fieldId:"queryOrgId",selectEmptyText:"清空组织",queryAddon:false});
+$("#queryorgFullName").click(function(event){
+	queryOrgTree.show();
+ });
 
