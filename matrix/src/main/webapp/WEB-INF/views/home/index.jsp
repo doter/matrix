@@ -7,7 +7,7 @@
 <html lang="zh-CN">
 	<head>
 		<meta charset="utf-8" />
-		<title>Dashboard - Ace Admin</title>
+		<title>Matrix</title>
 		
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<meta http-equiv="Cache-Control" content="no-store" />
@@ -403,7 +403,13 @@
 										用户管理
 									</a>
 								</li>
-
+								
+								<li>
+									<a href="sys/res/list" target="center">
+										<i class="icon-double-angle-right"></i>
+										资源管理
+									</a>
+								</li>
 							
 		
 							</ul>

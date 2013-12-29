@@ -1,10 +1,13 @@
 package com.matrix.core.model;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.matrix.sys.model.Organization;
 
 @SuppressWarnings("serial")
@@ -14,7 +17,7 @@ public abstract class TreeVO<ID extends Serializable> extends BasicDataVO<ID> {
 	@Column(name = "level_code", length = 254)
 	private String levelCode;
 	
-	/** 组织全称 */
+	/** 全称 */
 	@Column(name="full_name",length = 254)
 	private String fullName;
 
@@ -56,5 +59,28 @@ public abstract class TreeVO<ID extends Serializable> extends BasicDataVO<ID> {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
+	
+	/** 配合生成TreeGrid */
+	@Transient
+	public Serializable getParentId(){
+		if(null != getParent()){
+			return getParent().getId();
+		}
+		return null;
+	}
+	
+	@Transient
+	public Boolean getLoaded(){
+		return !leaf;
+	}
+	
+	@Transient
+	public Boolean getExpanded(){
+		return !leaf;
+	}
+	
+	/** 配合生成TreeGrid  end */
+	
+	@JsonIgnore
 	public abstract TreeVO getParent();
 }

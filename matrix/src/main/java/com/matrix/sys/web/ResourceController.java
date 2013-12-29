@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,20 +18,29 @@ import com.googlecode.genericdao.search.Sort;
 import com.matrix.core.util.Page;
 import com.matrix.core.web.BaseController;
 import com.matrix.core.web.util.AjaxResult;
-import com.matrix.sys.model.User;
-import com.matrix.sys.service.UserService;
+import com.matrix.sys.enums.ResourceType;
+import com.matrix.sys.enums.ResourceTypeEditor;
+import com.matrix.sys.model.Resource;
+import com.matrix.sys.service.ResourceService;
 
 @Controller
-@RequestMapping(value = "/sys/user")
-public class UserController extends BaseController{ 
+@RequestMapping(value = "/sys/res")
+public class ResourceController extends BaseController{
+
 	@Autowired
-	private UserService service;
+	private ResourceService service;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		super.initBinder(binder);
+		binder.registerCustomEditor(ResourceType.class, new ResourceTypeEditor());
+	}
 
 	@RequestMapping(value="/list", method = RequestMethod.GET)
 	public String list() {
-		return "sys/user/list";
+		return "sys/res/list";
 	}
-
+	
 	@RequestMapping(value="/listData", method = RequestMethod.GET)
 	@ResponseBody
 	public Object listData(@RequestParam(value = "page", defaultValue = "1") Integer currPage,
@@ -38,51 +49,54 @@ public class UserController extends BaseController{
 			@RequestParam(value = "sord") String sortType,
 			String filters) {
 		
-		Page<User> page = new Page<User>();
+		Page<Resource> page = new Page<Resource>();
 		page.setPageSize(pageSize);
 		page.setCurrPage(currPage);
-		if(StringUtils.isNotEmpty(sortField)){
-			page.getSorts().add(new Sort(sortField, "desc".equalsIgnoreCase(sortType) ? true : false));
-		}
+		page.getSorts().add(new Sort("levelCode",false));
+		
 		
 		Map queryParams = new HashMap();
-		if(StringUtils.isNotEmpty(filters)){
-			queryParams.put("filters", filters);
-		}
 		
 		page = service.findPage(page, queryParams);
 		return page;
 	}
 	
 	@RequestMapping(value="/addNew", method = RequestMethod.GET)
-	public @ModelAttribute("user") User addNew(String parentId) {
-		User user = new User();
-		return user;
+	public @ModelAttribute("res") Resource addNew(String parentId) {
+		Resource res = new Resource();
+		if(StringUtils.isNotEmpty(parentId)){
+			Resource parent = this.service.get(parentId);
+			res.setParent(parent);
+			res.setFullName(parent.getFullName()+".");
+		}
+		return res;
 	}
 	
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(String id) {
-		return "sys/user/edit";
+		return "sys/res/edit";
 	}
 	
-	@ModelAttribute("user")
-	public User getValue(String id){
-		User user = null;
+	@ModelAttribute("res")
+	public Resource getValue(String id){
+		Resource res = null;
 		if(StringUtils.isNotEmpty(id)){
-			user = service.get(id);
+			res = service.get(id);
+		}else{
+			res = new Resource();
 		}
-		if(null == user){
-			user = new User();
-		}
-		return user;
+		return res;
 	}
 	
 	@RequestMapping(value="/save", method = RequestMethod.POST)
 	@ResponseBody
-	public AjaxResult save(@ModelAttribute("user")User user) {
+	public AjaxResult save(@ModelAttribute("res")Resource res) {
 		AjaxResult rs = new AjaxResult();
 		try{
-			service.save(user);
+			if(null == res.getIsSuper()){
+				res.setIsSuper(false);
+			}
+			service.save(res);
 			rs.setStatus(AjaxResult.STATUS_SUCCESS);
 			rs.setMsg("保存成功！");
 		}catch(Exception e){
@@ -108,27 +122,6 @@ public class UserController extends BaseController{
 		}catch(Exception e){
 			rs.setStatus(AjaxResult.STATUS_ERROR);
 			rs.setMsg("删除失败！<br/>" + e.getMessage());
-		}
-		
-		return rs;
-	}
-	
-	@RequestMapping(value="/submit/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public AjaxResult submit(@PathVariable String id) {
-		AjaxResult rs = new AjaxResult();
-		if(StringUtils.isEmpty(id)){
-			rs.setStatus(AjaxResult.STATUS_ERROR);
-			rs.setMsg("提交时参数id不能为空！");
-			return rs;
-		}
-		try{
-			service.submit(id);
-			rs.setStatus(AjaxResult.STATUS_SUCCESS);
-			rs.setMsg("提交成功！");
-		}catch(Exception e){
-			rs.setStatus(AjaxResult.STATUS_ERROR);
-			rs.setMsg("提交失败！<br/>" + e.getMessage());
 		}
 		
 		return rs;

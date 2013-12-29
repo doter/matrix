@@ -7,6 +7,13 @@
  */
 package com.matrix.sys.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.matrix.core.common.enums.Status;
+import com.matrix.core.dao.BaseDao;
+import com.matrix.core.service.impl.TreeServiceImpl;
+import com.matrix.sys.dao.ResourceDao;
+import com.matrix.sys.model.Resource;
 import com.matrix.sys.service.ResourceService;
 
 /**
@@ -19,6 +26,17 @@ import com.matrix.sys.service.ResourceService;
  * @version 1.0.0<br/>
  * 
  */
-public class ResourceServiceImpl implements ResourceService {
+public class ResourceServiceImpl extends TreeServiceImpl<Resource,String> implements ResourceService {
+	@Autowired
+	private ResourceDao dao;
+	@Override
+	public BaseDao getDao() {
+		return dao;
+	}
+	
+	protected void setDefaultValue(Resource res){
+		super.setDefaultValue(res);
+		res.setStatus(Status.VALID);
+	}
 
 }

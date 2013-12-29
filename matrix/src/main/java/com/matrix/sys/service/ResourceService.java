@@ -7,6 +7,9 @@
  */
 package com.matrix.sys.service;
 
+import com.matrix.core.service.TreeService;
+import com.matrix.sys.model.Resource;
+
 /**
  * <b>类名称：</b>ResourceService<br/>
  * <b>类描述：</b><br/>
@@ -17,6 +20,6 @@ package com.matrix.sys.service;
  * @version 1.0.0<br/>
  * 
  */
-public interface ResourceService {
+public interface ResourceService extends TreeService<Resource,String>{
 
 }

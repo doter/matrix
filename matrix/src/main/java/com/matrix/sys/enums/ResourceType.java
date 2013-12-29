@@ -20,8 +20,9 @@ import com.matrix.core.common.enums.EnumType;
  * 
  */
 public enum ResourceType  implements EnumType{
-	MENU("菜单", 1),
-	FUNCTION("功能", 2);
+	GROUP("资源组", 1),
+	MENU("菜单", 2),
+	FUNCTION("功能", 3);
 
 	private final String displayName;
 	private final int sequence;
@@ -43,6 +44,8 @@ public enum ResourceType  implements EnumType{
 
 	@Override
 	public int getSequence() {
+		
 		return sequence;
+		
 	}
 }

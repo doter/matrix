@@ -36,7 +36,7 @@
 					async: {
 						enable: true,
 						dataType: "json",
-						url:"${ctx}/sys/org/getOrgTree",
+						url:"sys/org/getOrgTree",
 						autoParam:["id"]
 					},
 					data: {
@@ -66,7 +66,7 @@
 					height : 554,
 					rowNum : 15,
 					rowList : [ 15,25,50,100 ],
-					url:"${ctx}/sys/org/listData",
+					url:"sys/org/listData",
 					datatype : "json",
 					colNames : [ 'ID', '组织编码', '组织全称', '创建时间','创建人', '状态', '最后更新时间', '描述' ],
 					colModel : [
@@ -139,9 +139,7 @@
 									}
 								});
 							},
-							search : true,
-							searchtext : "查询",
-							searchicon : 'icon-search orange',
+							search : length,
 							refresh : true,
 							refreshtext : "刷新",
 							refreshicon : 'icon-refresh green',

@@ -86,11 +86,11 @@
 		<error-code>404</error-code>
 		<location>/WEB-INF/views/error/404.jsp</location>
 	</error-page>
-	<!--  -->
+	
 	<jsp-config>
     <jsp-property-group>
-        <display-name>js config</display-name>   
-        <url-pattern>*.js</url-pattern>
+        <display-name>page config</display-name>   
+        <url-pattern>/WEB-INF/views/*</url-pattern>
         <el-ignored>false</el-ignored>   
         <page-encoding>utf-8</page-encoding>   
         <scripting-invalid>false</scripting-invalid>   
@@ -99,5 +99,4 @@
   
     </jsp-property-group>
 </jsp-config>
-
 </web-app>

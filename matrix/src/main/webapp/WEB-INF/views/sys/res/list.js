@@ -1,27 +1,35 @@
-var grid_render_id = "#userTable";
-var pager_render_id = "#userTablepager";
+var grid_render_id = "#resTable";
+var pager_render_id = "#resTablepager";
 $(function() {
 	$(grid_render_id).jqGrid(
 			{
-				caption : "用户列表",
-				height : 460,
+				caption : "资源列表",
+				height : 560,
 				rowNum : 15,
 				rowList : [ 15, 25, 50, 100 ],
-				url : "${ctx}/sys/user/listData",
+				treeGrid: true,
+			    treeGridModel: 'adjacency',
+			    ExpandColumn : 'name',
+			    treeIcons : {plus:'icon-plus',minus:'icon-minus',leaf:'icon-leaf'},
+			    tree_root_level:0,
+				url : "sys/res/listData",
 				datatype : "json",
-				colNames : [ 'ID', '用户编码', '用户账号', '用户名称', '启用', '所属组织','创建时间', '创建人', '状态', '更新时间','操作'],
+				colNames : [ 'ID','资源名称','资源类型','资源路径','权限标识','超级管理员权限', '状态','操作'],
 				colModel : [ {name : 'id',index : 'id',hidden : true},
-				             {name : 'code',index : 'code',width : 120},
-				             {name : 'account',index : 'account',width : 80},
 				             {name : 'name',index : 'name',width : 80},
-				             {name : 'isEnable',index : 'isEnable',width : 60},
-				             {name : 'org.name',index : 'org.name',width : 200}, 
-				             {name : 'createTime',index : 'createTime',width : 120},
-				             {name : 'creator',index : 'creator',width : 60},
-				             {name : 'status',index : 'status',width : 60},
-				             {name : 'updateTime',index : 'updateTime',width : 120},
+				             {name : 'type',index : 'type',width : 60},
+				             {name : 'uri',index : 'uri',width : 180},
+				             {name : 'permission',index : 'permission',width : 120},
+				             {name : 'isSuper',index : 'isSuper',width : 60},
+				             {name : 'status',index : 'status',width : 40},
 				             {name : 'id', index: 'id', align:"center",formatter: function (cellvalue, options, rowObject) {
-				            	 var actions = "<a href='javascript:void(0)'  onclick=\"resetPw('" + cellvalue + "')\">密码重置</a>"
+				            	 var actions = "<a href='javascript:void(0)'  onclick=\"addNew('" + cellvalue + "')\">新建下级</a>";
+				            	 actions += "|<a href='javascript:void(0)'  onclick=\"resetPw('" + cellvalue + "')\">修改</a>";
+				            	 if(rowObject.leaf){
+				            		 actions += "|<a href='javascript:void(0)'  onclick=\"remove2('" + cellvalue + "')\">删除</a>";
+				            	 }else{
+				            		 actions += "|删除";
+				            	 }
 				            	 return actions;
 				             }}
 				            ],
@@ -32,12 +40,19 @@ $(function() {
 				autowidth : true,
 				multiselect : true,
 				//multikey: "ctrlKey",
+				loadonce : true,
 				multiboxonly : true,
 				jsonReader : {
 					root : "result",
 					page : "currPage",
 					total : "totalPage",
 					records : "totalCount"
+				},
+				treeReader : {
+					level_field: "degree",
+					parent_id_field: "parentId",
+					leaf_field: "leaf",
+					expanded_field: false
 				},
 				loadComplete : function() {
 					var table = this;
@@ -67,7 +82,7 @@ $(function() {
 				del : true,
 				deltext : "删除",
 				delicon : 'icon-trash red',
-				delfunc : remove,
+				delfunc : remove2,
 				search : false,
 				searchtext : "查询",
 				searchicon : 'icon-search orange',
@@ -144,20 +159,32 @@ $(function() {
 		});
 	});
 	
-	function addNew() {
-		$("#add_dialog_content").load('${ctx}/sys/user/addNew');
+	
+})
+
+	function addNew(parentId) {
+		var selectedId = null;
+		if(undefined == parentId){
+			selectedId = jQuery(grid_render_id).jqGrid('getGridParam','selrow');
+		}else{
+			selectedId = parentId;
+		}
+		
+		selectedId = selectedId == null ? "" : selectedId;
+		
+		$("#add_dialog_content").load('sys/res/addNew?parentId='+selectedId);
 		$("#add_dialog").modal("show");
 	}
 
 	function edit(id) {
-		$("#edit_dialog_content").load('${ctx}/sys/user/edit?id=' + id);
+		$("#edit_dialog_content").load('sys/res/edit?id=' + id);
 		$("#edit_dialog").modal("show");
 	}
 
-	function remove(id) {
-		bootbox.confirm("您确认要删除该用户吗?", function(result) {
+	function remove2(id) {
+		bootbox.confirm("您确认要删除该资源吗?", function(result) {
 			if (result) {
-				$.get("${ctx}/sys/user/remove/" + id,
+				$.get("sys/res/remove/" + id,
 						function(data) {
 							if ("success" == data.status) {
 								$(grid_render_id).jqGrid().trigger("reloadGrid");
@@ -168,8 +195,7 @@ $(function() {
 			}
 		});
 	}
-})
-
+	
 function resetPw(id) {
 		alert(id);
 }
@@ -194,40 +220,3 @@ function submit(id) {
 	});
 }
 
-var queryOrgTree = $("#queryorgFullName").dropDownTree({ssource:"${ctx}/sys/org/getOrgTree",fieldId:"queryOrgId",selectEmptyText:"清空组织",queryAddon:false});
-$("#queryorgFullName").click(function(event){
-	queryOrgTree.show();
- });
-
-
-function getQueryFilter() {
-	var rules = '';
-	var form = document.getElementById("user-form-search");
-    for (var i = 0; i < form.elements.length; i++) {
-        var e = form.elements[i];
-        if("" == e.value){
-    		continue;
-    	}
-        
-        if(e.name == 'account'){
-        	rules += '{"t":"s","f":"account","op":"like","v":"'+e.value+'"},';
-		}else if(e.name == 'code'){
-			rules += '{"t":"s","f":"code","op":"like","v":"'+e.value+'"},';
-		}else if(e.name == 'name'){
-			rules += '{"t":"s","f":"name","op":"like","v":"'+e.value+'"},';
-		}else if(e.name == 'org.id'){
-			rules += '{"t":"s","f":"org.id","op":"eq","v":"'+e.value+'"},';
-		}else if(e.name == 'isEnable'){
-			rules += '{"t":"b","f":"isEnable","op":"eq","v":"'+e.value+'"},';
-		}
-    } 
-    if(0 == rules.length){
-    	return "";
-    }
-    rules = rules.substring(0,rules.length-1);
-    return "{\"groupOp\":\"AND\",\"rules\":["+rules+"]}";
-};
-
-function search(){
-	$(grid_render_id).jqGrid('setGridParam',{postData:{"filters":getQueryFilter()}}).trigger("reloadGrid");
-}

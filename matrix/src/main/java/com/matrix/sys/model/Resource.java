@@ -24,7 +24,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.matrix.core.model.TreeVO;
+import com.matrix.core.web.util.EnumTypeSerialize;
 import com.matrix.sys.enums.ResourceType;
 
 /**
@@ -52,25 +54,28 @@ public class Resource extends TreeVO<String> implements Serializable{
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Resource parent;
 	
-	
-	
 	/** 资源类型 */
+	@JsonSerialize(using = EnumTypeSerialize.class)
 	@Enumerated(EnumType.ORDINAL)
 	ResourceType type;
 
-	/** 资源URL */
-	@Column(length = 64)
-	private String url;
-	
-	/** 资源对应的图标 */
+	/** 资源图标 */
 	@Column(length = 32)
 	private String icon;
 	
+	/** 资源URL */
+	@Column(length = 255)
+	private String uri;
 	
 	
-	/** 是否需要权限 */
-	@Column(name = "is_authorization")
-	private Boolean isAuthorization;
+	/** 资源权限标识 */
+	@Column(length = 255)
+	private String permission;
+	
+	
+	/** 超级管理员权限 */
+	@Column(name = "is_super")
+	private Boolean isSuper;
 	
 
 	public String getId() {
@@ -102,17 +107,6 @@ public class Resource extends TreeVO<String> implements Serializable{
 		this.type = type;
 	}
 
-
-	public String getUrl() {
-		return url;
-	}
-
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-
 	public String getIcon() {
 		return icon;
 	}
@@ -123,14 +117,32 @@ public class Resource extends TreeVO<String> implements Serializable{
 	}
 
 
-	public Boolean getIsAuthorization() {
-		return isAuthorization;
+	public String getUri() {
+		return uri;
 	}
 
 
-	public void setIsAuthorization(Boolean isAuthorization) {
-		this.isAuthorization = isAuthorization;
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
-	
-	
+
+
+	public String getPermission() {
+		return permission;
+	}
+
+
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
+
+
+	public Boolean getIsSuper() {
+		return isSuper;
+	}
+
+
+	public void setIsSuper(Boolean isSuper) {
+		this.isSuper = isSuper;
+	}
 }

@@ -7,4 +7,8 @@ import com.matrix.core.model.VO;
 
 public interface VOService<T extends VO, ID extends Serializable> extends BaseService<T, ID> {
 	public void updateStatus(ID id, Status status);
+	
+	public void submit(ID id);
+	
+	public void submit(T vo);
 }

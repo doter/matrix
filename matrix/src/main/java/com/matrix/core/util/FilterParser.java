@@ -40,9 +40,11 @@ public class FilterParser implements Serializable {
 	public static final String OP_NULL = "null"; //is null
 	public static final String OP_NOT_NULL = "nnull"; //is not null
 	
-	public static final String OP_PROPERTY = "field";
+	public static final String OP_PROPERTY = "f";
+	/**s->String,i->Integer,b->Boolean **/
+	public static final String OP_PROPERTY_TYPE = "t";
 	public static final String OP_SYMBOL = "op";
-	public static final String OP_VALUE = "data";
+	public static final String OP_VALUE = "v";
 	
 	
 
@@ -72,22 +74,22 @@ public class FilterParser implements Serializable {
 					filterItem = filterItems.get(i);
 					if(OP_EQUAL.equals(filterItem.get(OP_SYMBOL))){
 						fs[i] = "{"+filterItem.get(OP_PROPERTY) +"} = ?"+(i+1);
-						values.add(filterItem.get(OP_VALUE));
+						values.add(getValue(filterItem));
 					}else if(OP_NOT_EQUAL.equals(filterItem.get(OP_SYMBOL))){
 						fs[i] = "{"+filterItem.get(OP_PROPERTY) +"} != ?"+(i+1);
-						values.add(filterItem.get(OP_VALUE));
+						values.add(getValue(filterItem));
 					}else if(OP_LESS_THAN.equals(filterItem.get(OP_SYMBOL))){
 						fs[i] = "{"+filterItem.get(OP_PROPERTY) +"} < ?"+(i+1);
-						values.add(filterItem.get(OP_VALUE));
+						values.add(getValue(filterItem));
 					}else if(OP_GREATER_THAN.equals(filterItem.get(OP_SYMBOL))){
 						fs[i] = "{"+filterItem.get(OP_PROPERTY) +"} > ?"+(i+1);
-						values.add(filterItem.get(OP_VALUE));
+						values.add(getValue(filterItem));
 					}else if(OP_LESS_OR_EQUAL.equals(filterItem.get(OP_SYMBOL))){
 						fs[i] = "{"+filterItem.get(OP_PROPERTY) +"} <= ?"+(i+1);
-						values.add(filterItem.get(OP_VALUE));
+						values.add(getValue(filterItem));
 					}else if(OP_GREATER_OR_EQUAL.equals(filterItem.get(OP_SYMBOL))){
 						fs[i] = "{"+filterItem.get(OP_PROPERTY) +"} >= ?"+(i+1);
-						values.add(filterItem.get(OP_VALUE));
+						values.add(getValue(filterItem));
 					}else if(OP_LIKE.equals(filterItem.get(OP_SYMBOL))){
 						fs[i] = "{"+filterItem.get(OP_PROPERTY) +"} LIKE ?"+(i+1);
 						values.add("%" + (String)filterItem.get(OP_VALUE) + "%");
@@ -152,5 +154,21 @@ public class FilterParser implements Serializable {
 			throw new BizException("查询过滤解释出错：\n"+e.getMessage());
 		}
 		return new Object[]{expression.toString(),values};
+	}
+	
+	private static Object getValue(Map filterItem){
+		if("s".equals(filterItem.get(OP_PROPERTY_TYPE))){
+			return filterItem.get(OP_VALUE);
+		}else if("i".equals(filterItem.get(OP_PROPERTY_TYPE))){
+			return Integer.valueOf((String)filterItem.get(OP_VALUE));
+		}else if("b".equals(filterItem.get(OP_PROPERTY_TYPE))){
+			if("0".equals(filterItem.get(OP_VALUE))){
+				return Boolean.FALSE;
+			}else{
+				return Boolean.TRUE;
+			}
+		}else{
+			return filterItem.get(OP_VALUE);
+		}
 	}
 }

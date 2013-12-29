@@ -31,6 +31,14 @@ public abstract class VOServiceImpl <T extends VO, ID extends Serializable> exte
 		entity.setStatus(Status.SAVE);
 		entity.setCreateTime(now);
 		entity.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
+		setDefaultValue(entity);
+	}
+	
+	/**
+	 * 设置默认值
+	 */
+	protected void setDefaultValue(T entity){
+		
 	}
 	/**
 	 * 更新时时设置默认的属性
@@ -42,9 +50,33 @@ public abstract class VOServiceImpl <T extends VO, ID extends Serializable> exte
 		entity.setUpdateUser(getCurrentUser().getName());
 	}
 	
-	public void updateStatus(ID id, Status status){
+	public void updateStatus(Serializable id, Status status){
 		Map propertys = new HashMap();
 		propertys.put("status", status);
 		getDao().updateById(getDao().getEntityClass(), id, propertys);
+	}
+	
+	public void submit(ID id){
+		T vo = get(id);
+		submit(vo);
+	}
+	
+	public void submit(T vo){
+		check(vo);
+		beforeSubmit(vo);
+		updateStatus(vo.getId(),Status.VALID);
+		afterSubmit(vo);
+	}
+	
+	protected void check(T vo) {
+
+	}
+	
+	protected void beforeSubmit(T entity) {
+
+	}
+
+	protected void afterSubmit(T entity) {
+
 	}
 }

@@ -33,7 +33,6 @@ import com.matrix.sys.model.OnlineUser;
 public abstract class BaseServiceImpl<T extends Entity, ID extends Serializable> implements BaseService<T, ID> {
 	public boolean save(T entity) {
 		beforeSave(entity);
-		check(entity);
 		boolean rs = getDao().save(entity);
 		getDao().flush();
 		afterSave(entity);
@@ -111,10 +110,6 @@ public abstract class BaseServiceImpl<T extends Entity, ID extends Serializable>
 	
 	public boolean exists(T entity){
 		return getDao().exists(entity);
-	}
-
-	protected void check(T entity) {
-
 	}
 
 	protected void beforeSave(T entity) {
