@@ -86,7 +86,6 @@
 		<error-code>404</error-code>
 		<location>/WEB-INF/views/error/404.jsp</location>
 	</error-page>
-	
 	<jsp-config>
     <jsp-property-group>
         <display-name>page config</display-name>   
@@ -96,7 +95,6 @@
         <scripting-invalid>false</scripting-invalid>   
         <include-prelude></include-prelude>   
         <include-coda></include-coda>   
-  
     </jsp-property-group>
 </jsp-config>
 </web-app>

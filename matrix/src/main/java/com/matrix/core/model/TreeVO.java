@@ -1,14 +1,12 @@
 package com.matrix.core.model;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.matrix.sys.model.Organization;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -17,7 +15,7 @@ public abstract class TreeVO<ID extends Serializable> extends BasicDataVO<ID> {
 	@Column(name = "level_code", length = 254)
 	private String levelCode;
 	
-	/** 全称 */
+	/** 组织 */
 	@Column(name="full_name",length = 254)
 	private String fullName;
 

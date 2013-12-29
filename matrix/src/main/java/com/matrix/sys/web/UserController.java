@@ -112,7 +112,7 @@ public class UserController extends BaseController{
 		
 		return rs;
 	}
-	
+
 	@RequestMapping(value="/submit/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public AjaxResult submit(@PathVariable String id) {
