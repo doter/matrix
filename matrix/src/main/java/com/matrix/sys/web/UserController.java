@@ -28,6 +28,7 @@ public class UserController extends BaseController{
 	@RequestMapping(value="/list", method = RequestMethod.GET)
 	public String list() {
 		return "sys/user/list";
+		
 	}
 
 	@RequestMapping(value="/listData", method = RequestMethod.GET)
