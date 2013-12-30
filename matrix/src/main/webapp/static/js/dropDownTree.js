@@ -20,7 +20,6 @@ $.fn.dropDownTree = function(options) {
   	if(tree == undefined){
     	tree = createTreeObj();
 	}
-  	
 	//新建下拉树dom对象，并把对象id加入缓存列表
 	function createTreeObj(){
 		var objId = Math.random()+"";
