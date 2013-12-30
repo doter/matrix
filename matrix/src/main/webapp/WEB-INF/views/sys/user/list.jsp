@@ -62,7 +62,7 @@
   </div>
 </div>
 
-<!-- 修改组织 -->
+<!-- 修改用户 -->
 <div class="modal fade" id="edit_dialog" tabindex="-1" role="dialog" aria-labelledby="edit_dialog_title" aria-hidden="true">
   <div class="modal-dialog" style="width: 970px;">
     <div class="modal-content">

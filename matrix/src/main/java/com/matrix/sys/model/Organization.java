@@ -25,6 +25,7 @@ public class Organization extends TreeVO<String> implements Serializable {
 	@Id
 	@GenericGenerator(name="idGenerator",strategy="uuid")
 	@GeneratedValue(generator="idGenerator")
+	@Column(length=36)
 	private String id;
 	
 	/** 父组织 */

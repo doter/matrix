@@ -12,7 +12,7 @@ package com.matrix.core.common.enums;
 public enum Status implements EnumType {
 	SAVE("保存", 1),
 	VALID("有效", 2),
-	CANCEL("作废", 3);
+	CANCEL("无效", 3);
 
 	private final String displayName;
 	private final int sequence;

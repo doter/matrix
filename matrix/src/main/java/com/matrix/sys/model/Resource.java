@@ -46,6 +46,7 @@ public class Resource extends TreeVO<String> implements Serializable{
 	@Id
 	@GenericGenerator(name="idGenerator",strategy="uuid")
 	@GeneratedValue(generator="idGenerator")
+	@Column(length=36)
 	private String id;
 	
 	/** 上级资源 */

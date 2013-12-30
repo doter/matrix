@@ -62,7 +62,7 @@
 
 <script type="text/javascript">
 	$(function() {
-		var orgTree = $("#orgFullName").dropDownTree({ssource:"${ctx}/sys/org/getOrgTree",fieldId:"orgId"});
+		var orgTree = $("#orgFullName").dropDownTree({ssource:"sys/org/getOrgTree",fieldId:"orgId"});
 		$("#orgFullName_addon").click(function(event){
 			$("#orgFullName").click();
 		});

@@ -37,6 +37,7 @@ public class UserRole extends com.matrix.core.model.Entity<String> implements Se
 	@Id
 	@GenericGenerator(name="idGenerator",strategy="uuid")
 	@GeneratedValue(generator="idGenerator")
+	@Column(length=36)
 	private String id;
 	
 	@ManyToOne

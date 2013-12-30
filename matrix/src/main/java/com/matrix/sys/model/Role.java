@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.matrix.core.model.VO;
+import com.matrix.core.model.BasicDataVO;
 
 /**
  * <b>类名称：</b>Role<br/>
@@ -32,29 +32,13 @@ import com.matrix.core.model.VO;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "t_sys_role")
-public class Role extends VO<String> implements Serializable {
+public class Role extends BasicDataVO<String> implements Serializable {
 	@Id
 	@GenericGenerator(name="idGenerator",strategy="uuid")
 	@GeneratedValue(generator="idGenerator")
+	@Column(length=36)
 	private String id;
 	
-	/** 角色编码 */
-	@Column(length = 32)
-	private String code;
-	
-	/** 角色名称 */
-	@Column(length = 64)
-	private String name;
-
-
-	/** 排序号 */
-	@Column(name = "sort_no")
-	private Integer sortNo;
-
-	/** 描述 */
-	@Column(length = 254)
-	private String description;
-
 	public Role() {
 		super();
 	}
@@ -63,42 +47,7 @@ public class Role extends VO<String> implements Serializable {
 		return id;
 	}
 	
-	
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Integer getSortNo() {
-		return sortNo;
-	}
-
-	public void setSortNo(Integer sortNo) {
-		this.sortNo = sortNo;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	
 }

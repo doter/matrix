@@ -9,6 +9,7 @@ package com.matrix.sys.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,6 +38,7 @@ public class RoleResource extends com.matrix.core.model.Entity<String> implement
 	@Id
 	@GenericGenerator(name="idGenerator",strategy="uuid")
 	@GeneratedValue(generator="idGenerator")
+	@Column(length=36)
 	private String id;
 	
 	/** 角色 **/

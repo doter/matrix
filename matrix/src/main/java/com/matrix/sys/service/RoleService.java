@@ -7,6 +7,9 @@
  */
 package com.matrix.sys.service;
 
+import com.matrix.core.service.BasicDataService;
+import com.matrix.sys.model.Role;
+
 /**
  * <b>类名称：</b>RoleService<br/>
  * <b>类描述：</b><br/>
@@ -17,6 +20,6 @@ package com.matrix.sys.service;
  * @version 1.0.0<br/>
  * 
  */
-public interface RoleService {
+public interface RoleService extends BasicDataService<Role,String>{
 
 }

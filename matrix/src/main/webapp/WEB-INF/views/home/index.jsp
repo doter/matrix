@@ -391,14 +391,14 @@
 
 							<ul class="submenu">
 								<li>
-									<a href="${ctx}/sys/org/list" target="center">
+									<a href="sys/org/list" target="center">
 										<i class="icon-double-angle-right"></i>
 										组织管理
 									</a>
 								</li>
 
 								<li>
-									<a href="${ctx}/sys/user/list" target="center">
+									<a href="sys/user/list" target="center">
 										<i class="icon-double-angle-right"></i>
 										用户管理
 									</a>
@@ -410,7 +410,12 @@
 										资源管理
 									</a>
 								</li>
-							
+								<li>
+									<a href="sys/role/list" target="center">
+										<i class="icon-double-angle-right"></i>
+										角色管理
+									</a>
+								</li>
 		
 							</ul>
 						</li>

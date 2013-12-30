@@ -40,7 +40,7 @@ public abstract class VO<ID extends Serializable> extends Entity<ID> {
 	private Timestamp updateTime;
 	
 	/** 更新人员,登录的用户账号 */
-	@Column(name="update_user",length = 36,updatable=false)
+	@Column(name="update_user",length = 36)
 	private String updateUser;
 
 	/** 创建者的用户,登录的用户账号 */

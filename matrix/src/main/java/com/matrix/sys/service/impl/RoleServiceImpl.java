@@ -7,6 +7,12 @@
  */
 package com.matrix.sys.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.matrix.core.dao.BaseDao;
+import com.matrix.core.service.impl.BasicDataServiceImpl;
+import com.matrix.sys.dao.RoleDao;
+import com.matrix.sys.model.Role;
 import com.matrix.sys.service.RoleService;
 
 /**
@@ -19,6 +25,13 @@ import com.matrix.sys.service.RoleService;
  * @version 1.0.0<br/>
  * 
  */
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends BasicDataServiceImpl<Role,String> implements RoleService {
+	@Autowired
+	private RoleDao dao;
+
+	@Override
+	public BaseDao getDao() {
+		return dao;
+	}
 
 }

@@ -194,7 +194,7 @@ function submit(id) {
 	});
 }
 
-var queryOrgTree = $("#queryorgFullName").dropDownTree({ssource:"${ctx}/sys/org/getOrgTree",fieldId:"queryOrgId",selectEmptyText:"清空组织",queryAddon:false});
+var queryOrgTree = $("#queryorgFullName").dropDownTree({ssource:"sys/org/getOrgTree",fieldId:"queryOrgId",selectEmptyText:"清空组织",queryAddon:false});
 $("#queryorgFullName").click(function(event){
 	queryOrgTree.show();
  });
