@@ -1,15 +1,15 @@
 package com.matrix.core.util;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.matrix.core.model.TreeVO;
 
 public class TreeUtils {
 
-	public static <T extends TreeVO> String treeToJson(List<T> tree) {
+	public static <T extends TreeVO> String treeToJson(Collection<T> tree) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		if (null != tree || tree.size() > 0) {
+		if (null != tree && tree.size() > 0) {
 			for (TreeVO node : tree) {
 				sb.append("{\"id\":\"").append(node.getId()).append("\"");
 

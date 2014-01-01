@@ -7,6 +7,19 @@
  */
 package com.matrix.sys.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.googlecode.genericdao.search.ISearch;
+import com.googlecode.genericdao.search.Search;
+import com.matrix.core.dao.BaseDao;
+import com.matrix.core.service.impl.BaseServiceImpl;
+import com.matrix.sys.dao.RoleResourceDao;
+import com.matrix.sys.model.Resource;
+import com.matrix.sys.model.Role;
+import com.matrix.sys.model.RoleResource;
 import com.matrix.sys.service.RoleResourceService;
 
 /**
@@ -19,6 +32,65 @@ import com.matrix.sys.service.RoleResourceService;
  * @version 1.0.0<br/>
  * 
  */
-public class RoleResourceServiceImpl implements RoleResourceService {
+public class RoleResourceServiceImpl extends BaseServiceImpl<RoleResource,String> implements RoleResourceService {
+
+	@Autowired
+	private RoleResourceDao dao;
+	
+	
+	@Override
+	public BaseDao getDao() {
+		return dao;
+	}
+	
+	public void save(String roleId,List<String> resourceIds){
+		//先删除该角色的所有资源,
+		dao.deleteByRoleId(roleId);
+		
+		if(null == resourceIds || 0 == resourceIds.size()){
+			return;
+		}
+		
+		//插入新分配的资源
+		RoleResource rr = null;
+		Resource res = null;
+		Role role = new Role();
+		role.setId(roleId);
+		for(int i=0,size = resourceIds.size(); i < size; i++){
+			rr = new RoleResource();
+			res = new Resource();
+			res.setId(resourceIds.get(i));
+			rr.setResource(res);
+			rr.setRole(role);
+			dao.save(rr);
+		    if ( i % 20 == 0 ) {
+		        dao.flush();
+		        dao.clear();
+		    }
+		}
+	}
+	
+	/**
+	 * 描述:分配给角色的资源
+	 * @param roleId
+	 * @return
+	 */
+	public List<Resource> getAssignResource(String roleId){
+		List<Resource> resList = null;
+		Search search = new Search(RoleResource.class);
+		search.addField("resource");
+		search.addFilterEqual("role.id", roleId);
+		search.setResultMode(ISearch.RESULT_ARRAY);
+		List<Object[]> list = dao.search(search);
+		if(null != list && list.size() > 0){
+			resList = new ArrayList<Resource>(list.size());
+			for (Object[] array : list) {
+				resList.add((Resource)array[0]);
+			}
+		}else{
+			resList = new ArrayList<Resource>();
+		}
+		return resList;
+	}
 
 }

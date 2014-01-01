@@ -7,6 +7,7 @@
  */
 package com.matrix.sys.dao.impl;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.matrix.core.dao.impl.BaseDaoImpl;
@@ -25,5 +26,11 @@ import com.matrix.sys.model.RoleResource;
  */
 @Repository
 public class RoleResourceDaoImpl extends BaseDaoImpl<RoleResource, String> implements RoleResourceDao{
-
+	public void deleteByRoleId(String roleId){
+		String hql = "delete RoleResource t where t.role.id = :roleId";
+		Query query = getSession().createQuery(hql);
+		query.setParameter("roleId", roleId);
+		query.executeUpdate();
+		flush();
+	}
 }

@@ -21,5 +21,5 @@ import com.matrix.sys.model.RoleResource;
  * 
  */
 public interface RoleResourceDao extends BaseDao<RoleResource,String>{
-
+	public void deleteByRoleId(String roleId);
 }

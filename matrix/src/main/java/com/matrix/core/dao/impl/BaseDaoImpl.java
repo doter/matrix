@@ -147,4 +147,8 @@ public class BaseDaoImpl<T, ID extends Serializable>  extends GenericDAOImpl<T, 
 	public boolean exists(T entity){
 		return _exists(entity);
 	}
+	
+	public void clear(){
+		this.getSession().clear();
+	}
 }

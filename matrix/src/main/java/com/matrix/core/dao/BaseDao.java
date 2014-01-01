@@ -50,4 +50,6 @@ public interface BaseDao<T,ID extends Serializable> extends GenericDAO<T, ID>{
 	public void deleteByProperty(Class clazz,Map<String,?> whereClause);
 	
 	public boolean exists(T entity);
+	
+	public void clear();
 }

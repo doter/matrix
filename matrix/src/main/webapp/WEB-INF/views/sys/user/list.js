@@ -20,8 +20,10 @@ $(function() {
 				             {name : 'creator',index : 'creator',width : 60},
 				             {name : 'status',index : 'status',width : 60},
 				             {name : 'updateTime',index : 'updateTime',width : 120},
-				             {name : 'id', index: 'id', align:"center",formatter: function (cellvalue, options, rowObject) {
-				            	 var actions = "<a href='javascript:void(0)'  onclick=\"resetPw('" + cellvalue + "')\">密码重置</a>"
+				             {name : 'id', index: 'id', align:"center",width : 180,formatter: function (cellvalue, options, rowObject) {
+				            	 var actions = "<a href='javascript:void(0)'  onclick=\"resetPw('" + cellvalue + "')\">分配权限</a>"
+				            	 actions += "|<a href='javascript:void(0)'  onclick=\"resetPw('" + cellvalue + "')\">设置组织范围</a>"
+				            	 actions += "|<a href='javascript:void(0)'  onclick=\"resetPw('" + cellvalue + "')\">重置密码</a>"
 				            	 return actions;
 				             }}
 				            ],
