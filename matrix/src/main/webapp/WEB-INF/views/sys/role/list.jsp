@@ -76,6 +76,24 @@
   </div>
 </div>
 
+<!-- 资源分配 -->
+<div class="modal fade" id="assign_resource_dialog" tabindex="-1" role="dialog" aria-labelledby="assign_resource_dialog_title" aria-hidden="true">
+  <div class="modal-dialog" style="width: 970px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="assign_resource_dialog_title">分配-权限资源</h4>
+      </div>
+      <div id="assign_resource_dialog_content" class="modal-body"  style="padding: 10px 10px 0px;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="assign_resource_dialog_save" type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript" charset="utf-8">
 <%@ include file="list.js" %>
 </script>

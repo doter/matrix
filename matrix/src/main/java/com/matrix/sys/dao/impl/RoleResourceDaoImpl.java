@@ -7,10 +7,16 @@
  */
 package com.matrix.sys.dao.impl;
 
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
 import com.matrix.core.dao.impl.BaseDaoImpl;
 import com.matrix.sys.dao.RoleResourceDao;
+import com.matrix.sys.model.Resource;
+import com.matrix.sys.model.Role;
 import com.matrix.sys.model.RoleResource;
 
 /**
@@ -25,5 +31,29 @@ import com.matrix.sys.model.RoleResource;
  */
 @Repository
 public class RoleResourceDaoImpl extends BaseDaoImpl<RoleResource, String> implements RoleResourceDao{
-
+	public void save(String roleId,List<String> resourceIds){
+		//先删除该角色的所有资源,
+		String hql = "delete RoleResource t where t.role.id = :roleId";
+		Query query = getSession().createQuery(hql);
+		query.setParameter("roleId", roleId);
+		query.executeUpdate();
+		
+		//插入新分配的资源
+		RoleResource rr = null;
+		Resource res = null;
+		Role role = new Role();
+		role.setId(roleId);
+		for(int i=0,size = resourceIds.size(); i < size; i++){
+			rr = new RoleResource();
+			res = new Resource();
+			res.setId(resourceIds.get(i));
+			rr.setResource(res);
+			rr.setRole(role);
+			    _save(rr);
+			    if ( i % 20 == 0 ) {
+			        flush();
+			    }
+		}
+		flush();
+	}
 }

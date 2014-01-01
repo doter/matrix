@@ -7,6 +7,8 @@
  */
 package com.matrix.sys.dao;
 
+import java.util.List;
+
 import com.matrix.core.dao.BaseDao;
 import com.matrix.sys.model.RoleResource;
 
@@ -21,5 +23,5 @@ import com.matrix.sys.model.RoleResource;
  * 
  */
 public interface RoleResourceDao extends BaseDao<RoleResource,String>{
-
+	public void save(String roleId,List<String> resourceIds);
 }
