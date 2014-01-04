@@ -15,7 +15,7 @@ public abstract class TreeVO<ID extends Serializable> extends BasicDataVO<ID> {
 	@Column(name = "level_code", length = 254)
 	private String levelCode;
 	
-	/** 全称 **/
+	/** 全称 */
 	@Column(name="full_name",length = 254)
 	private String fullName;
 
