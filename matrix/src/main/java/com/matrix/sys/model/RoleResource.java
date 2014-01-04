@@ -42,12 +42,12 @@ public class RoleResource extends com.matrix.core.model.Entity<String> implement
 	private String id;
 	
 	/** 角色 **/
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id")
 	private Role role;
 
 	/** 资源 **/
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "resource_id")
 	private Resource resource;
 

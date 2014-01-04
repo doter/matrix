@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.googlecode.genericdao.search.Sort;
 import com.matrix.core.util.Page;
 import com.matrix.core.web.BaseController;
@@ -133,11 +134,5 @@ public class RoleController extends BaseController{
 		}
 		
 		return rs;
-	}
-	
-	@RequestMapping(value="/assignResource", method = RequestMethod.GET)
-	public @ModelAttribute("role") Role assignResource(String id) {
-		Role role = service.get(id);
-		return role;
 	}
 }

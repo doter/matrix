@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.googlecode.genericdao.search.Sort;
 import com.matrix.core.util.Page;
-import com.matrix.core.util.TreeUtils;
 import com.matrix.core.web.BaseController;
 import com.matrix.core.web.util.AjaxResult;
 import com.matrix.sys.enums.ResourceType;
@@ -126,11 +125,5 @@ public class ResourceController extends BaseController{
 		}
 		
 		return rs;
-	}
-	
-	@RequestMapping(value="/getResourceTree")
-	@ResponseBody
-	public String  getResourceTree() {
-		return TreeUtils.treeToJson(service.getAll());
 	}
 }

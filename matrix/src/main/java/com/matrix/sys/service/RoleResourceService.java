@@ -7,12 +7,6 @@
  */
 package com.matrix.sys.service;
 
-import java.util.List;
-
-import com.matrix.core.service.BaseService;
-import com.matrix.sys.model.Resource;
-import com.matrix.sys.model.RoleResource;
-
 /**
  * <b>类名称：</b>RoleResourceService<br/>
  * <b>类描述：</b><br/>
@@ -23,8 +17,6 @@ import com.matrix.sys.model.RoleResource;
  * @version 1.0.0<br/>
  * 
  */
-public interface RoleResourceService extends BaseService<RoleResource,String>{
-	public void save(String roleId,List<String> resourceIds);
-	
-	public List<Resource> getAssignResource(String roleId);
+public interface RoleResourceService {
+
 }
