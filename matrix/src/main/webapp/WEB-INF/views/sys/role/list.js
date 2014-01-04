@@ -20,7 +20,6 @@ $(function() {
 				             {name : 'id', index: 'id', align:"center",formatter: function (cellvalue, options, rowObject) {
 				            	 var actions = "<a href='javascript:void(0)'  onclick=\"assignResource('" + cellvalue + "')\">分配资源权限</a>";
 				            	 actions += "|<a href='javascript:void(0)'  onclick=\"edit('" + cellvalue + "')\">修改</a>";
-				            	 actions += "|<a href='javascript:void(0)'  onclick=\"remove2('" + cellvalue + "')\">删除</a>";
 				            	 return actions;
 				             }}
 				            ],
@@ -66,7 +65,7 @@ $(function() {
 				del : true,
 				deltext : "删除",
 				delicon : 'icon-trash red',
-				delfunc : remove2,
+				delfunc : remove,
 				search : false,
 				searchtext : "查询",
 				searchicon : 'icon-search orange',
@@ -158,12 +157,7 @@ function edit(id) {
 	$("#edit_dialog").modal("show");
 }
 
-function assignResource(id) {
-	$("#assign_resource_dialog_content").load('sys/role/assignResource?id=' + id);
-	$("#assign_resource_dialog").modal("show");
-}
-
-function remove2(id) {
+function remove(id) {
 	bootbox.confirm("您确认要删除该角色吗?", function(result) {
 		if (result) {
 			$.get("sys/role/remove/" + id,
